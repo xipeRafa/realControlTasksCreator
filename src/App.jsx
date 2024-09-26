@@ -40,37 +40,32 @@ function App() {
   const [items, setItems] = useState([]);
 
   const itemCollection = query(
-    collection(firestoreDB, 'tasksRealControl'),
-    where('asignadoPara', '==', localStorage.getItem('user'))
-  );
+      collection(firestoreDB, 'tasksRealControl'),
+      where('asignadoPara', '==', localStorage.getItem('user'))
+  )
 
-
-const [toggle, setToggle] = useState(true);
+  const [toggle, setToggle] = useState(true)
 
   useEffect(() => {
-    let isMounted = true;
 
-    getDocs(itemCollection)
-      .then((querySnapshot) => {
-        if (querySnapshot.size === 0) {
-          console.log('No results!');
-          localStorage.removeItem("Done");
-        }
+      getDocs(itemCollection).then((resp) => {
 
-        const documents = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+          if (resp.size === 0) {
+              console.log('No results!');
+          }
 
-        setItems(documents);
+          const documents = resp.docs.map((doc) => (
+              { id: doc.id, ...doc.data() }
+          ))
+
+          setItems(documents);
+
+      }).catch((err) => {
+          console.log('Error searching items', err)
       })
-      .catch((err) => {
-        console.log('Error searching items', err);
-      });
 
-
-    isMounted = false;
   }, [toggle])
+
 
 
   const updateById = async (id, obj) => {
@@ -121,7 +116,7 @@ const [toggle, setToggle] = useState(true);
               handleClose()
               setTimeout(()=>{ location.reload() },600)
           }else{
-            alert('Clave Incorrecta')
+              alert('Clave Incorrecta')
           }
       }
 
@@ -131,7 +126,7 @@ const [toggle, setToggle] = useState(true);
               handleClose()
               setTimeout(()=>{ location.reload() },1600)
           }else{
-            alert('Clave Incorrecta')
+              alert('Clave Incorrecta')
           }
       }
 
@@ -141,7 +136,7 @@ const [toggle, setToggle] = useState(true);
               handleClose()
               setTimeout(()=>{ location.reload() },1600)
           }else{
-            alert('Clave Incorrecta')
+              alert('Clave Incorrecta')
           }
       }
       
@@ -151,14 +146,13 @@ const [toggle, setToggle] = useState(true);
               handleClose()
               setTimeout(()=>{ location.reload() },1600)
           }else{
-            alert('Clave Incorrecta')
+              alert('Clave Incorrecta')
           }
       }
 
     }else{
-      localStorage.removeItem('user')
-      setTimeout(()=>{ location.reload() },1600)
-    
+        localStorage.removeItem('user')
+        setTimeout(()=>{ location.reload() },1600)
     }
 
   }
@@ -179,7 +173,7 @@ const [toggle, setToggle] = useState(true);
 
 
 
-const {
+  const {
     asignadoPara,
     comentarios,
     consumibles,
@@ -192,48 +186,45 @@ const {
 
 
   const handlerTaskState=({target})=>{
-    const {name, value} = target
-    setTaskState({...taskState, [name]:value})
+      const {name, value} = target
+      setTaskState({...taskState, [name]:value})
   }
 
-  console.log(items)
 
- const postCollection = collection(firestoreDB, 'tasksRealControl');
+
+  const postCollection = collection(firestoreDB, 'tasksRealControl');
 
   const guardar =()=>{
 
-
-      if(
-          asignadoPara.trim() === '' ||
+      if (asignadoPara.trim() === '' ||
           comentarios.trim() === '' ||
           consumibles.trim() === '' ||
           direccionCliente.trim() === '' ||
           fechaMeta.trim() === '' ||
           nombreCliente.trim() === '' ||
           servicioDescripcion.trim() === '' ||
-          tipoDeServicio.trim() === '' 
-      ){
-        alert('Algun Campo esta Vacio')
-        return
-      }
+          tipoDeServicio.trim() === '' ){
+              alert('Algun Campo esta Vacio')
+              return
+          }
 
       if (confirm("Crear Servicio")) {
           taskState.createdAt = Date.now()
           taskState.completed = false
-          addDoc(postCollection, taskState);
+          addDoc(postCollection, taskState)
           setTaskState({
-    asignadoPara:"",
-    comentarios:"",
-    consumibles:"",
-    direccionCliente:"",
-    fechaMeta:"",
-    nombreCliente:"",
-    servicioDescripcion:"",
-    tipoDeServicio:""
-  })
-
+              asignadoPara:"",
+              comentarios:"",
+              consumibles:"",
+              direccionCliente:"",
+              fechaMeta:"",
+              nombreCliente:"",
+              servicioDescripcion:"",
+              tipoDeServicio:""
+          })
       }
-  }
+
+    }
 
 
   return (
