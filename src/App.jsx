@@ -179,6 +179,21 @@ const {
 
   const guardar =()=>{
 
+
+      if(
+          asignadoPara.trim() === '' ||
+          comentarios.trim() === '' ||
+          consumibles.trim() === '' ||
+          direccionCliente.trim() === '' ||
+          fechaMeta.trim() === '' ||
+          nombreCliente.trim() === '' ||
+          servicioDescripcion.trim() === '' ||
+          tipoDeServicio.trim() === '' 
+      ){
+        alert('Algun Campo esta Vacio')
+        return
+      }
+
       if (confirm("Crear Servicio")) {
           taskState.createdAt = Date.now()
           addDoc(postCollection, taskState);
