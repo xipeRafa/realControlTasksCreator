@@ -45,6 +45,8 @@ function App() {
   );
 
 
+const [toggle, setToggle] = useState(true);
+
   useEffect(() => {
     let isMounted = true;
 
@@ -68,7 +70,28 @@ function App() {
 
 
     isMounted = false;
-  }, []);
+  }, [toggle])
+
+
+  const updateById = async (id, obj) => {
+
+    if (confirm("Marcar como Servicio Completado")) {
+      obj.completed = true
+      obj.completedTime = Date.now()
+      delete obj.id
+
+      const aDoc = doc(firestoreDB, 'tasksRealControl', id)
+
+      try {
+          await updateDoc(aDoc, obj);
+      } catch (error) {
+          console.error(error);
+      }
+
+      setToggle(!toggle)
+    }
+
+  }
 
 
 
@@ -354,9 +377,11 @@ const {
       <Container>
         <Row>
           <Col>
-              {items?.map((el, i)=>(
+              {items?.slice(0,12).sort((a, b) => b.createdAt - a.createdAt).map((el, i)=>(
                   <div key={i}>
+
                     <hr />
+
                     <p>Cliente: {el.nombreCliente}</p>
                     <p>Direccion: {el.direccionCliente}</p>
                     <p>Servicio: {el.servicioDescripcion}</p>
@@ -365,9 +390,13 @@ const {
                     <p>Consumibles: {el.consumibles}</p>
                     <p>Comentarios: {el.comentarios}</p>
                     <p>Tarea Creada el: {msecToDateNumbers(el.createdAt)}</p>
-                    <Button variant="primary" className={el.completed ? '' : 'red'}>
+
+                    <Button disabled={el.completed} variant="primary" className={el.completed ? '' : 'red'} onClick={()=>updateById(el.id, el)}>
                         {el.completed ? 'Completado' : 'Pendiente'}
                     </Button>
+
+                    <p className={!el?.completedTime ? 'd-none' : 'warning'}>Completado el: {msecToDateNumbers(el?.completedTime)}</p>
+
                     <hr />
                   </div>
                 ))}
