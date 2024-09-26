@@ -196,8 +196,20 @@ const {
 
       if (confirm("Crear Servicio")) {
           taskState.createdAt = Date.now()
+          taskState.completed = false
           addDoc(postCollection, taskState);
-      }{}
+          setTaskState({
+    asignadoPara:"",
+    comentarios:"",
+    consumibles:"",
+    direccionCliente:"",
+    fechaMeta:"",
+    nombreCliente:"",
+    servicioDescripcion:"",
+    tipoDeServicio:""
+  })
+
+      }
   }
 
 
@@ -353,6 +365,9 @@ const {
                     <p>Consumibles: {el.consumibles}</p>
                     <p>Comentarios: {el.comentarios}</p>
                     <p>Tarea Creada el: {msecToDateNumbers(el.createdAt)}</p>
+                    <Button variant="primary" className={el.completed ? '' : 'red'}>
+                        {el.completed ? 'Completado' : 'Pendiente'}
+                    </Button>
                     <hr />
                   </div>
                 ))}

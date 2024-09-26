@@ -23,3 +23,8 @@ label{
 textarea{
     margin-bottom: 10px!important;
 }
+
+.red{
+  background-color: red!important;
+  border: none!important;
+}
