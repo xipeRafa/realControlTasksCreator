@@ -70,11 +70,36 @@ function App() {
 
   const updateById = async (id, obj) => {
 
-    if (confirm("Marcar como Servicio Completado")) {
+    if (confirm("Marcar como Servicio Iniciado")) {
 
         obj.completed = true
         obj.completedTime = Date.now()
         delete obj.id
+
+        const aDoc = doc(firestoreDB, 'tasksRealControl', id)
+
+        try {
+            await updateDoc(aDoc, obj);
+        } catch (error) {
+            console.error(error);
+        }
+
+        setToggle(!toggle)
+
+    }
+
+  }
+
+
+
+   const updateById2 = async (id, obj) => {
+
+    if (confirm("Firmar como Servicio Realizado")) {
+
+        obj.signedCustomer = true
+        obj.signedCustomerTime = Date.now()
+        delete obj.id
+
 
         const aDoc = doc(firestoreDB, 'tasksRealControl', id)
 
@@ -219,6 +244,7 @@ function App() {
       if (confirm("Crear Servicio")) {
           taskState.createdAt = Date.now()
           taskState.completed = false
+          taskState.signedCustomer = false
           addDoc(postCollection, taskState)
           setTaskState({
               asignadoPara:"",
@@ -298,10 +324,6 @@ function App() {
 
         <Form.Label>Correo de Cliente</Form.Label>
         <Form.Control type="mail" name='correoCliente' value={correoCliente} placeholder='@' onChange={(e)=>handlerTaskState(e)}/>
-
-
-
-
 
         <Form.Label>Descripción del Servicio</Form.Label>
         <Form.Control type="text" name='servicioDescripcion' value={servicioDescripcion} onChange={(e)=>handlerTaskState(e)}/>
@@ -393,10 +415,18 @@ function App() {
                     <p>Tarea Creada el: {msecToDateNumbers(el.createdAt)}</p>
 
                     <Button disabled={el.completed} variant="primary" className={el.completed ? '' : 'red'} onClick={()=>updateById(el.id, el)}>
-                        {el.completed ? 'Completado' : 'Pendiente'}
+                        {el.completed ? 'Iniciado' : 'Pendiente'}
                     </Button>
 
-                    <p className={!el?.completedTime ? 'd-none' : 'warning'}>Completado el: {msecToDateNumbers(el?.completedTime)}</p>
+                    <p className={!el?.completedTime ? 'd-none' : 'warning'}>Iniciado el: {msecToDateNumbers(el?.completedTime)}</p>
+
+
+                    <Button disabled={el.signedCustomer} variant="primary" className={el.signedCustomer ? '' : 'red'} onClick={()=>updateById2(el.id, el)}>
+                        {!el.signedCustomer ? 'Firmar' : 'Firmado'}
+                    </Button>
+
+                    <p className={!el?.signedCustomerTime ? 'd-none' : 'warning'}>Firmado el: {msecToDateNumbers(el?.signedCustomerTime)}</p>
+
 
                     <hr />
                   </div>
