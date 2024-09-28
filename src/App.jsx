@@ -71,19 +71,21 @@ function App() {
   const updateById = async (id, obj) => {
 
     if (confirm("Marcar como Servicio Completado")) {
-      obj.completed = true
-      obj.completedTime = Date.now()
-      delete obj.id
 
-      const aDoc = doc(firestoreDB, 'tasksRealControl', id)
+        obj.completed = true
+        obj.completedTime = Date.now()
+        delete obj.id
 
-      try {
-          await updateDoc(aDoc, obj);
-      } catch (error) {
-          console.error(error);
-      }
+        const aDoc = doc(firestoreDB, 'tasksRealControl', id)
 
-      setToggle(!toggle)
+        try {
+            await updateDoc(aDoc, obj);
+        } catch (error) {
+            console.error(error);
+        }
+
+        setToggle(!toggle)
+
     }
 
   }
@@ -168,7 +170,9 @@ function App() {
     fechaMeta:"",
     nombreCliente:"",
     servicioDescripcion:"",
-    tipoDeServicio:""
+    tipoDeServicio:"",
+    correoCliente:"",
+    telefonoCliente:""
   })
 
 
@@ -181,7 +185,9 @@ function App() {
     fechaMeta,
     nombreCliente,
     servicioDescripcion,
-    tipoDeServicio
+    tipoDeServicio,
+    correoCliente,
+    telefonoCliente
   } = taskState
 
 
@@ -197,6 +203,8 @@ function App() {
   const guardar =()=>{
 
       if (asignadoPara.trim() === '' ||
+          correoCliente.trim() === '' ||
+          telefonoCliente.trim() === '' ||
           comentarios.trim() === '' ||
           consumibles.trim() === '' ||
           direccionCliente.trim() === '' ||
@@ -214,6 +222,8 @@ function App() {
           addDoc(postCollection, taskState)
           setTaskState({
               asignadoPara:"",
+              correoCliente:"",
+              telefonoCliente:"",
               comentarios:"",
               consumibles:"",
               direccionCliente:"",
@@ -273,18 +283,25 @@ function App() {
     {localStorage.user === 'admin' ? 
       <Container>
         <Row>
-          <Col>
+        <Col>
 
-
-
-
-        <Form>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+      <Form>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
         <Form.Label>Nombre de Cliente</Form.Label>
         <Form.Control type="text" name='nombreCliente' value={nombreCliente} onChange={(e)=>handlerTaskState(e)} />
 
         <Form.Label>Direccion de Cliente</Form.Label>
         <Form.Control type="text" name='direccionCliente' value={direccionCliente} onChange={(e)=>handlerTaskState(e)}/>
+
+        <Form.Label>Telefono de Cliente</Form.Label>
+        <Form.Control type="text" name='telefonoCliente' value={telefonoCliente} onChange={(e)=>handlerTaskState(e)}/>
+
+        <Form.Label>Correo de Cliente</Form.Label>
+        <Form.Control type="mail" name='correoCliente' value={correoCliente} placeholder='@' onChange={(e)=>handlerTaskState(e)}/>
+
+
+
+
 
         <Form.Label>Descripción del Servicio</Form.Label>
         <Form.Control type="text" name='servicioDescripcion' value={servicioDescripcion} onChange={(e)=>handlerTaskState(e)}/>
@@ -333,15 +350,7 @@ function App() {
         </Form.Select>
 
       
-
-
-
-
-
-
-
-
-      </Form.Group>
+        </Form.Group>
 
 
 
@@ -349,7 +358,7 @@ function App() {
         <Form.Control as="textarea"  name='comentarios' value={comentarios} onChange={(e)=>handlerTaskState(e)} />
 
 
-    </Form>
+      </Form>
 
       <Button variant="primary" onClick={guardar}>
           GUARDAR
@@ -357,7 +366,7 @@ function App() {
 
 
 
-    </Col>
+        </Col>
         </Row>
       </Container>
 
@@ -372,9 +381,10 @@ function App() {
                   <div key={i}>
 
                     <hr />
-
                     <p>Cliente: {el.nombreCliente}</p>
                     <p>Direccion: {el.direccionCliente}</p>
+                    <p>Correo: {el.correoCliente}</p>
+                    <p>Telefono: {el.telefonoCliente}</p>
                     <p>Servicio: {el.servicioDescripcion}</p>
                     <p>Hora: {el.fechaMeta}</p>
                     <p>Tipo: {el.tipoDeServicio}</p>
