@@ -260,7 +260,31 @@ function App() {
           })
       }
 
-    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   return (
@@ -308,6 +332,7 @@ function App() {
 
     {localStorage.user === 'admin' ? 
       <Container>
+      <h2>Creador de Servicios</h2>
         <Row>
         <Col>
 
@@ -353,8 +378,60 @@ function App() {
               <option value="industrial grande">Industrial Grande</option>
         </Form.Select>
 
+      {/*  <Form.Label>Consumibles a Utilizar</Form.Label>
+        <Form.Control as="textarea" name='consumibles' value={consumibles} onChange={(e)=>handlerTaskState(e)} />*/}
+
+
+
+
+
+
+
+
+
+
         <Form.Label>Consumibles a Utilizar</Form.Label>
-        <Form.Control as="textarea" name='consumibles' value={consumibles} onChange={(e)=>handlerTaskState(e)} />
+        <Form.Select
+              value={consumibles}
+              name='consumibles' 
+              onChange={(e)=>handlerTaskState(e)}>
+
+              <option></option>
+
+              <option value="Cipermetrina - ELegy">Cipermetrina - ELegy</option>
+              
+              <option value="Pybuthrin">Pybuthrin</option>
+              <option value="Biothrine">Biothrine</option>
+              <option value="Ficam w">Ficam w</option>
+
+              <hr />
+              <option value="Max force">Max force</option>
+              <option value="Starycide">Starycide</option>
+              <option value="Demand 2.5 CS">Demand 2.5 CS</option>
+
+              <hr />
+              <option value="Termidor Duo">Termidor Duo</option>
+              <option value="Racumid">Racumid</option>
+              <option value="Contrac Blox">Contrac Blox</option>
+
+              <hr />
+              <option value="Vastrap Pegamento">Vastrap Pegamento</option>
+              <option value="Trampa para ratones con pedal">Trampa para ratones con pedal</option>
+              <option value="Trampa De Captura Múltiple">Trampa De Captura Múltiple</option>
+        </Form.Select>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -385,6 +462,9 @@ function App() {
       <Button variant="primary" onClick={guardar}>
           GUARDAR
       </Button>
+
+      <br />
+       <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
 
 
 
