@@ -265,6 +265,11 @@ function App() {
 
 
 
+    const [doneState, setDoneState]=useState(true)
+
+    const[sliceState, setSliceState]=useState(0)
+    let prodByPage = 4;
+    const[sliceAlert, setSliceAlert]=useState('')
 
 
 
@@ -289,7 +294,7 @@ function App() {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button variant="primary" onClick={handleShow} className='botonEntrar'>
           {localStorage.user} {localStorage.user ? '➪' : 'Entrar'} 
       </Button>
 
@@ -477,35 +482,56 @@ function App() {
 
 
       <Container>
+        {localStorage.user !== 'admin' && localStorage.user !== undefined ?
+
+          <div>
+            <Col>
+                <Form.Control type="date" />
+            </Col>
+
+            <Col>
+                <Button  className='mb-1 w-100' variant="dark" onClick={()=>{setDoneState(!doneState),setSliceState(0)}}>
+                    {doneState ? 'INICIADOS' : 'PENDIENTES'}
+                </Button>
+            </Col> 
+          </div>:''}
+
         <Row>
-          <Col>
-              {items?.slice(0,12).sort((a, b) => b.createdAt - a.createdAt).map((el, i)=>(
-                  <div key={i}>
+                   <Col>
+              {items?.slice(sliceState, sliceState + prodByPage)
+                .sort((a, b) => b.createdAt - a.createdAt).filter(el => el.completed === doneState)
+                  .map((el, i)=>(
+
+                  <div key={i} className='item'>
 
                     <hr />
-                    <p>Cliente: {el.nombreCliente}</p>
-                    <p>Direccion: {el.direccionCliente}</p>
-                    <p>Correo: {el.correoCliente}</p>
-                    <p>Telefono: {el.telefonoCliente}</p>
-                    <p>Servicio: {el.servicioDescripcion}</p>
-                    <p>Hora: {el.fechaMeta}</p>
-                    <p>Tipo: {el.tipoDeServicio}</p>
-                    <p>Consumibles: {el.consumibles}</p>
-                    <p>Comentarios: {el.comentarios}</p>
-                    <p>Tarea Creada el: {msecToDateNumbers(el.createdAt)}</p>
+                    <p><span>Cliente:</span> {el.nombreCliente}</p>
+                    <p><span>Direccion:</span> {el.direccionCliente}</p>
+                    <p><span>Correo:</span> {el.correoCliente}</p>
+                    <p><span>Telefono:</span> {el.telefonoCliente}</p>
+                    <p><span>Servicio:</span> {el.servicioDescripcion}</p>
+                    <p><span>Hora:</span> {el.fechaMeta}</p>
+                    <p><span>Tipo:</span> {el.tipoDeServicio}</p>
+                    <p><span>Consumibles:</span> {el.consumibles}</p>
+                    <p><span>Comentarios:</span> {el.comentarios}</p>
+                    <p><span>Tarea Creada el:</span> {msecToDateNumbers(el.createdAt)}</p>
 
                     <Button disabled={el.completed} variant="primary" className={el.completed ? '' : 'red'} onClick={()=>updateById(el.id, el)}>
                         {el.completed ? 'Iniciado' : 'Pendiente'}
                     </Button>
 
-                    <p className={!el?.completedTime ? 'd-none' : 'warning'}>Iniciado el: {msecToDateNumbers(el?.completedTime)}</p>
+                    <p className={!el?.completedTime ? 'd-none' : 'warning'}>
+                        Iniciado el: {msecToDateNumbers(el?.completedTime)}
+                    </p>
 
 
                     <Button disabled={el.signedCustomer} variant="primary" className={el.signedCustomer ? '' : 'red'} onClick={()=>updateById2(el.id, el)}>
                         {!el.signedCustomer ? 'Firmar' : 'Firmado'}
                     </Button>
 
-                    <p className={!el?.signedCustomerTime ? 'd-none' : 'warning'}>Firmado el: {msecToDateNumbers(el?.signedCustomerTime)}</p>
+                    <p className={!el?.signedCustomerTime ? 'd-none' : 'warning'}>
+                        Firmado el: {msecToDateNumbers(el?.signedCustomerTime)}
+                    </p>
 
 
                     <hr />
@@ -513,7 +539,70 @@ function App() {
                 ))}
           </Col>
         </Row>
+
+
+         {localStorage.user !== 'admin' && localStorage.user !== undefined ? 
+          <div>
+
+
+                <div className='sliceButtons'>
+
+            <button className={sliceState === 0 ? 'd-none' : 'button'} onClick={()=>{
+                                                                  if(sliceState > 0){
+                                                                      setSliceState(sliceState - prodByPage)
+                                                                      window.scrollTo(0,0)
+                                                                    }
+                                                                  }
+                                                                }>
+                                                                    ⇦ Anterior
+            </button>  
+
+
+
+            <button className={sliceState === prodByPage || sliceState === 0 ? 'd-none' : 'button'} onClick={()=>{ 
+                                                                                                        setSliceState(0)
+                                                                                                        window.scrollTo(0,0) 
+                                                                                                    }
+                                                                                                  }>
+                                                                                                      ０
+            </button>   
+
+
+
+            <button className='button' onClick={()=>{ 
+                                    if(items.filter(el => el.completed === doneState).length > sliceState + prodByPage){
+                                        setSliceState(sliceState + prodByPage) 
+                                        window.scrollTo(0,0) 
+                                    }else{
+                                        setSliceAlert(' No hay mas Servicios en esta Lista')
+                                        setTimeout(()=>{
+                                            setSliceAlert('')
+                                        },2500)
+                                    }
+                                }
+                    }>
+                        Siguiente ⇨ 
+            </button>  
+
+
+            <span className='sliceAlert'>{sliceAlert}</span>
+
+
+            <p className='sliceButtonsP'>De: {sliceState + 1} a: {items.length > sliceState + prodByPage ? sliceState + prodByPage : items.length}</p>
+            <p className='sliceButtonsP'>Paginas de {prodByPage} Servicios </p>
+
+        </div>
+
+
+          </div>:''}
+
+
+
       </Container>
+
+
+
+
 
 
         }

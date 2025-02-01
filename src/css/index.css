@@ -30,3 +30,16 @@ textarea{
   border: none!important;
   margin-right: 4px!important;
 }
+
+.item{
+  background-color: rgba(256,256,256, .4);
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.botonEntrar{
+  margin: 14px;
+}
+
+p>span{
+  font-weight: 200;
+}
