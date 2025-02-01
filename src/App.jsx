@@ -274,10 +274,13 @@ function App() {
 
 
 
+    const [DateMS, setDateMS]=useState('')
 
 
-
-
+    const setDate=(e)=>{
+        let DateToCero = Date.parse(e.target.value.replace('-', '/').replace('-', '/'))
+        setDateMS(DateToCero)
+    }
 
 
 
@@ -486,7 +489,8 @@ function App() {
 
           <div>
             <Col>
-                <Form.Control type="date" />
+            <Form.Label htmlFor="inputPassword5">Selecciona una Fecha:</Form.Label>
+                <Form.Control type="date" onChange={(e)=>setDate(e)}/>
             </Col>
 
             <Col>
@@ -499,6 +503,8 @@ function App() {
         <Row>
                    <Col>
               {items?.slice(sliceState, sliceState + prodByPage)
+                .filter(el=>el.createdAt > DateMS)
+                    .filter(el=>el.createdAt < DateMS + 86400000)
                 .sort((a, b) => b.createdAt - a.createdAt).filter(el => el.completed === doneState)
                   .map((el, i)=>(
 
