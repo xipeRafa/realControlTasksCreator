@@ -503,10 +503,11 @@ function App() {
         <Row>
                    <Col>
               {items?.slice(sliceState, sliceState + prodByPage)
-                .filter(el=>el.createdAt > DateMS)
-                    .filter(el=>el.createdAt < DateMS + 86400000)
-                .sort((a, b) => b.createdAt - a.createdAt).filter(el => el.completed === doneState)
-                  .map((el, i)=>(
+                      .filter(el=>el.createdAt > DateMS)
+                      .filter(el=>el.createdAt < DateMS + 86400000)
+                      .sort((a, b) => b.createdAt - a.createdAt)
+                      .filter(el => el.completed === doneState)
+                      .map((el, i)=>(
 
                   <div key={i} className='item'>
 
@@ -553,37 +554,40 @@ function App() {
 
                 <div className='sliceButtons'>
 
-            <button className={sliceState === 0 ? 'd-none' : 'button'} onClick={()=>{
-                                                                  if(sliceState > 0){
-                                                                      setSliceState(sliceState - prodByPage)
-                                                                      window.scrollTo(0,0)
-                                                                    }
-                                                                  }
-                                                                }>
-                                                                    ⇦ Anterior
+            <button className={sliceState === 0 ? 'd-none' : 'button'} 
+                    onClick={()=>{
+                        if(sliceState > 0){
+                            setSliceState(sliceState - prodByPage)
+                            window.scrollTo(0,0)
+                        }
+                    }}>
+                    ⇦ Anterior
             </button>  
 
 
 
-            <button className={sliceState === prodByPage || sliceState === 0 ? 'd-none' : 'button'} onClick={()=>{ 
-                                                                                                        setSliceState(0)
-                                                                                                        window.scrollTo(0,0) 
-                                                                                                    }
-                                                                                                  }>
-                                                                                                      ０
+            <button className={sliceState === prodByPage || sliceState === 0 ? 'd-none' : 'button'} 
+                    onClick={()=>{ 
+                        setSliceState(0)
+                        window.scrollTo(0,0) 
+                    }}>
+                    0
             </button>   
 
 
 
-            <button className='button' onClick={()=>{ 
-                                    if(items.filter(el => el.completed === doneState).length > sliceState + prodByPage){
-                                        setSliceState(sliceState + prodByPage) 
-                                        window.scrollTo(0,0) 
+            <button className='button my-5' onClick={()=>{ 
+                                    if(items.filter(el=>el.createdAt > DateMS)
+                                            .filter(el=>el.createdAt < DateMS + 86400000)
+                                            .filter(el => el.completed === doneState).length > sliceState + prodByPage){
+
+                                                  setSliceState(sliceState + prodByPage) 
+                                                  window.scrollTo(0,0) 
                                     }else{
-                                        setSliceAlert(' No hay mas Servicios en esta Lista')
-                                        setTimeout(()=>{
-                                            setSliceAlert('')
-                                        },2500)
+                                                  setSliceAlert(' No Hay Mas Servicios En Esta Lista')
+                                                  setTimeout(()=>{
+                                                      setSliceAlert('')
+                                                  },2500)
                                     }
                                 }
                     }>
@@ -593,9 +597,9 @@ function App() {
 
             <span className='sliceAlert'>{sliceAlert}</span>
 
-
-            <p className='sliceButtonsP'>De: {sliceState + 1} a: {items.length > sliceState + prodByPage ? sliceState + prodByPage : items.length}</p>
-            <p className='sliceButtonsP'>Paginas de {prodByPage} Servicios </p>
+{/*
+            <p className='sliceButtonsP'>De: {sliceState + 1} a: {items.filter(el=>el.createdAt > DateMS).filter(el=>el.createdAt < DateMS + 86400000).length > sliceState + prodByPage ? sliceState + prodByPage : items.length}</p>
+            <p className='sliceButtonsP'>Paginas de {prodByPage} Servicios </p>*/}
 
         </div>
 

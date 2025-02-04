@@ -43,3 +43,6 @@ textarea{
 p>span{
   font-weight: 200;
 }
+.sliceAlert{
+  color: darkred;
+}
