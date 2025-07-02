@@ -39,6 +39,8 @@ function App() {
 
   const [items, setItems] = useState([]);
 
+  console.log(items)
+
   const itemCollection = query(
       collection(firestoreDB, 'tasksRealControl'),
       where('asignadoPara', '==', localStorage.getItem('user'))
@@ -276,7 +278,7 @@ function App() {
 
     const [DateMS, setDateMS]=useState('')
 
-
+console.log(DateMS)
     const setDate=(e)=>{
         let DateToCero = Date.parse(e.target.value.replace('-', '/').replace('-', '/'))
         setDateMS(DateToCero)
@@ -505,7 +507,7 @@ function App() {
               {items?.slice(sliceState, sliceState + prodByPage)
                       .filter(el=>el.createdAt > DateMS)
                       .filter(el=>el.createdAt < DateMS + 86400000)
-                      .sort((a, b) => b.createdAt - a.createdAt)
+                      // .sort((a, b) => b.createdAt - a.createdAt)
                       .filter(el => el.completed === doneState)
                       .map((el, i)=>(
 
