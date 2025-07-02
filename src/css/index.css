@@ -40,6 +40,10 @@ textarea{
   margin: 14px;
 }
 
+.button{
+  margin-top: auto;
+}
+
 p>span{
   font-weight: 200;
 }

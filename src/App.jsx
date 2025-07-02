@@ -39,7 +39,6 @@ function App() {
 
   const [items, setItems] = useState([]);
 
-  console.log(items)
 
   const itemCollection = query(
       collection(firestoreDB, 'tasksRealControl'),
@@ -267,23 +266,23 @@ function App() {
 
 
 
-    const [doneState, setDoneState]=useState(true)
+    const [doneState, setDoneState]=useState(false)
 
     const[sliceState, setSliceState]=useState(0)
     let prodByPage = 4;
     const[sliceAlert, setSliceAlert]=useState('')
 
 
+ let today = new Date().toISOString().slice(0, 10); // 2025-06-18
 
 
-    const [DateMS, setDateMS]=useState('')
+    const [DateMS, setDateMS]=useState()
 
 console.log(DateMS)
     const setDate=(e)=>{
         let DateToCero = Date.parse(e.target.value.replace('-', '/').replace('-', '/'))
         setDateMS(DateToCero)
     }
-
 
 
 
@@ -491,7 +490,7 @@ console.log(DateMS)
 
           <div>
             <Col>
-            <Form.Label htmlFor="inputPassword5">Selecciona una Fecha:</Form.Label>
+            <Form.Label htmlFor="inputPassword5">Selecciona una Fecha y Busca en Pendientes</Form.Label>
                 <Form.Control type="date" onChange={(e)=>setDate(e)}/>
             </Col>
 
